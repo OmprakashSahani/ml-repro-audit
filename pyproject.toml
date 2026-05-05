@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ml-repro-audit"
+version = "0.1.0"
+description = "ML Systems Reproducibility Auditor"
+authors = [
+  { name = "Omprakash Sahani" }
+]
+requires-python = ">=3.10"
+
+dependencies = [
+  "requests",
+  "rich"
+]
+
+[project.scripts]
+ml-audit = "ml_audit.cli:main"
+
+[tool.setuptools]
+packages = ["ml_audit"]
+
+[tool.setuptools.package-dir]
+"" = "."
