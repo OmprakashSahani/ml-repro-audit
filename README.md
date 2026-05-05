@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: OmprakashSahani/ml-repro-audit/.github/actions/ml-audit@v1
+      - uses: uses: OmprakashSahani/ml-repro-audit/.github/actions/ml-audit@v1.1
         with:
           repo-url: https://github.com/user/repo
 ```
