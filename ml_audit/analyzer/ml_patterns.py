@@ -1,4 +1,7 @@
-def detect_ml_patterns(files: list[str]) -> dict:
+from ml_audit.github_api import fetch_file_content
+
+
+def detect_ml_patterns(owner: str, repo: str, files: list[str]) -> dict:
     patterns = {
         "uses_pytorch": False,
         "uses_distributed": False,
@@ -6,22 +9,26 @@ def detect_ml_patterns(files: list[str]) -> dict:
         "uses_dataparallel": False,
     }
 
-    for file_path in files:
-        if not file_path.endswith(".py"):
+    python_files = [file_path for file_path in files if file_path.endswith(".py")][:10]
+
+    for file_path in python_files:
+        content = fetch_file_content(owner, repo, file_path)
+
+        if not content:
             continue
 
-        path = file_path.lower()
+        text = content.lower()
 
-        if "torch" in path:
+        if "import torch" in text or "from torch" in text:
             patterns["uses_pytorch"] = True
 
-        if "distributed" in path:
+        if "torch.distributed" in text or "distributeddataParallel".lower() in text:
             patterns["uses_distributed"] = True
 
-        if "all_reduce" in path:
+        if "all_reduce" in text:
             patterns["uses_all_reduce"] = True
 
-        if "dataparallel" in path or "data_parallel" in path:
+        if "dataparallel" in text or "distributeddataparallel" in text:
             patterns["uses_dataparallel"] = True
 
     return patterns

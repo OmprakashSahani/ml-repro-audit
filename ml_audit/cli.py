@@ -41,7 +41,7 @@ def main() -> None:
         files = fetch_repo_files(owner, repo)
 
         analysis = analyze_repo_files(files)
-        patterns = detect_ml_patterns(files)
+        patterns = detect_ml_patterns(owner, repo, files)
 
         score, breakdown = compute_reproducibility_score(analysis)
         risk = compute_risk_level(score)

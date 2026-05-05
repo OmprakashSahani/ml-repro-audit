@@ -1,4 +1,5 @@
 from urllib.parse import urlparse
+import base64
 
 import requests
 
@@ -33,6 +34,7 @@ def fetch_repo_metadata(owner: str, repo: str) -> dict:
 
     return response.json()
 
+
 def fetch_repo_files(owner: str, repo: str) -> list[str]:
     url = f"{GITHUB_API_BASE}/repos/{owner}/{repo}/git/trees/HEAD?recursive=1"
 
@@ -44,3 +46,22 @@ def fetch_repo_files(owner: str, repo: str) -> list[str]:
     data = response.json()
 
     return [item["path"] for item in data.get("tree", []) if item["type"] == "blob"]
+
+
+def fetch_file_content(owner: str, repo: str, path: str) -> str:
+    url = f"{GITHUB_API_BASE}/repos/{owner}/{repo}/contents/{path}"
+
+    response = requests.get(url, timeout=10)
+
+    if response.status_code != 200:
+        return ""
+
+    data = response.json()
+
+    if data.get("encoding") == "base64":
+        try:
+            return base64.b64decode(data["content"]).decode("utf-8", errors="ignore")
+        except Exception:
+            return ""
+
+    return ""
