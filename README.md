@@ -7,15 +7,12 @@
 ![Interface](https://img.shields.io/badge/Interface-CLI-green)
 ![Status](https://img.shields.io/badge/Status-Active-success)
 [![PyPI](https://img.shields.io/pypi/v/ml-repro-audit.svg)](https://pypi.org/project/ml-repro-audit/)
-[![Downloads](https://static.pepy.tech/badge/ml-repro-audit)](https://pepy.tech/project/ml-repro-audit)
 
 </div>
 
 ---
 
 ## Quick Demo
-
-## 🎥 Demo
 
 [![asciicast](https://asciinema.org/a/OgamYxdbBFK8FMZk.svg)](https://asciinema.org/a/OgamYxdbBFK8FMZk)
 
