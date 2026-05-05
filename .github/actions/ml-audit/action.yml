@@ -5,6 +5,10 @@ inputs:
   repo-url:
     description: "GitHub repository URL to audit"
     required: true
+  version:
+    description: "ml-repro-audit package version"
+    required: false
+    default: "0.1.0"
 
 runs:
   using: "composite"
@@ -15,7 +19,7 @@ runs:
         python-version: "3.10"
 
     - name: Install tool
-      run: pip install -e .
+      run: pip install ml-repro-audit==${{ inputs.version }}
       shell: bash
 
     - name: Run audit
