@@ -3,6 +3,7 @@ import argparse
 from rich.console import Console
 from rich.table import Table
 
+from ml_audit.analyzer.ml_patterns import detect_ml_patterns
 from ml_audit.analyzer.repo_structure import analyze_repo_files
 from ml_audit.github_api import (
     fetch_repo_files,
@@ -38,10 +39,14 @@ def main() -> None:
         owner, repo = parse_github_url(args.repo_url)
         metadata = fetch_repo_metadata(owner, repo)
         files = fetch_repo_files(owner, repo)
+
         analysis = analyze_repo_files(files)
+        patterns = detect_ml_patterns(files)
+
         score, breakdown = compute_reproducibility_score(analysis)
         risk = compute_risk_level(score)
         insights = generate_insights(analysis)
+
     except ValueError as e:
         console.print(f"[red]Error:[/red] {e}")
         return
@@ -49,15 +54,15 @@ def main() -> None:
     console.print(f"\n[bold cyan]Repository:[/bold cyan] {metadata['full_name']}")
     console.print(f"[bold]Stars:[/bold] {metadata['stargazers_count']}\n")
 
-    table = Table(title="Structure Analysis")
-    table.add_column("Check", style="bold")
-    table.add_column("Status")
+    structure_table = Table(title="Structure Analysis")
+    structure_table.add_column("Check", style="bold")
+    structure_table.add_column("Status")
 
     for key, value in analysis.items():
         status = "[green]YES[/green]" if value else "[red]NO[/red]"
-        table.add_row(key, status)
+        structure_table.add_row(key, status)
 
-    console.print(table)
+    console.print(structure_table)
 
     console.print(f"\n[bold yellow]Reproducibility Score:[/bold yellow] {score:.1f}/10")
 
@@ -78,6 +83,16 @@ def main() -> None:
         breakdown_table.add_row(key, f"[{result_color}]{value}[/{result_color}]")
 
     console.print(breakdown_table)
+
+    pattern_table = Table(title="ML Systems Detection")
+    pattern_table.add_column("Pattern", style="bold")
+    pattern_table.add_column("Detected")
+
+    for key, value in patterns.items():
+        status = "[green]YES[/green]" if value else "[red]NO[/red]"
+        pattern_table.add_row(key, status)
+
+    console.print(pattern_table)
 
     console.print("\n[bold magenta]Insights:[/bold magenta]")
 
