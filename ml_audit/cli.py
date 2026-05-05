@@ -6,6 +6,7 @@ from ml_audit.github_api import (
     fetch_repo_metadata,
     parse_github_url,
 )
+from ml_audit.scoring import compute_reproducibility_score
 
 
 def main() -> None:
@@ -31,6 +32,7 @@ def main() -> None:
         metadata = fetch_repo_metadata(owner, repo)
         files = fetch_repo_files(owner, repo)
         analysis = analyze_repo_files(files)
+        score, breakdown = compute_reproducibility_score(analysis)
     except ValueError as e:
         print(f"Error: {e}")
         return
@@ -40,9 +42,14 @@ def main() -> None:
     print()
 
     print("Structure Analysis:")
-
     for key, value in analysis.items():
         print(f"- {key}: {'YES' if value else 'NO'}")
+
+    print()
+    print(f"Reproducibility Score: {score:.1f}/10")
+    print("Breakdown:")
+    for key, value in breakdown.items():
+        print(f"- {key}: {value}")
 
 
 if __name__ == "__main__":
