@@ -1,180 +1,204 @@
 <div align="center">
 
-# ML Experiment Tracker
-### A CLI-based experiment tracking system designed to support reproducible machine learning workflows, structured metric logging, and comparison across runs.
+# ML Reproducibility Auditor
+### A systems-oriented CLI tool to evaluate machine learning repositories for reproducibility, engineering quality, and ML infrastructure signals.
+
+![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![Interface](https://img.shields.io/badge/Interface-CLI-green)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
 </div>
 
 ---
 
-## Problem
-
-As machine learning experiments scale, it becomes difficult to track configurations, compare results, and reproduce outcomes. Without structured tracking, valuable insights are often lost across runs.
-
-This project builds a lightweight experiment tracking system from first principles to understand how reproducibility and evaluation workflows are handled in ML systems.
-
----
-
-## Overview
-
-This project implements a command-line tool for managing experiment runs, logging metrics, and comparing results using local JSON-based storage.
-
-The focus is on simplicity, reproducibility, and engineering workflow design rather than model complexity.
-
----
-
-## System Design
-
-- CLI interface for experiment lifecycle management
-- Timestamped run creation for reproducibility
-- JSON-based storage for experiment metadata
-- Structured metric logging
-- Run comparison across experiments
-
----
-
-## Workflow
-
-The system follows a production-style workflow:
-
-```text
-Issue → Branch → Code → Test → PR → CI → Merge → Release
-```
-
----
-
-## Key Capabilities
-
-- Create and manage experiment runs
-- Log metrics (accuracy, loss, etc.)
-- Store metadata in structured format
-- Compare runs across configurations
-- Enable reproducible experiment tracking
-
----
-
-## Example Usage
-
-### Create a run
+## Quick Demo
 
 ```bash
-mltracker create-run --name baseline
-```
-
-Output:
-
-```text
-Created run: runs/20260430T120000Z_baseline.json
+ml-audit https://github.com/pytorch/pytorch
 ```
 
 ---
 
-### Log metrics
+## Motivation
+
+Most machine learning repositories:
+
+- Cannot be reliably reproduced
+- Lack dependency and environment clarity
+- Provide no benchmark guarantees
+- Hide system-level bottlenecks
+
+This tool evaluates repositories through a **systems lens**, focusing on:
+
+- Reproducibility signals
+- Engineering maturity
+- ML systems design patterns
+
+---
+
+## Installation
 
 ```bash
-mltracker log-metric --run-file runs/<file>.json --name accuracy --value 0.95
+pip install -e .
 ```
 
 ---
 
-### List runs
+## Usage
 
 ```bash
-mltracker list-runs
+ml-audit https://github.com/user/repo
 ```
 
-Output:
-
-```text
-- baseline | 2026-04-30T12:00:00+00:00 | metrics: accuracy, loss
-- tuned    | 2026-04-30T12:15:00+00:00 | metrics: accuracy, loss
-```
-
----
-
-### Compare runs
+### JSON Output
 
 ```bash
-mltracker compare-runs runs/<file1>.json runs/<file2>.json
+ml-audit https://github.com/user/repo --json
 ```
 
-Output:
+---
+
+## Example Output
 
 ```text
-- baseline | accuracy=0.95, loss=0.42
-- tuned    | accuracy=0.97, loss=0.36
+Repository: user/repo
+
+Structure Analysis:
+- has_readme: YES
+- has_license: YES
+- has_ci: NO
+- has_benchmarks: YES
+
+Reproducibility Score: 7.5/10
+Risk Level: MEDIUM
+
+Code Quality Signals:
+- has_pinned_dependencies: YES
+- has_seed_control: NO
+- has_training_loop: YES
+
+ML Systems Detection:
+- uses_pytorch: YES
+- uses_distributed: YES
+- uses_all_reduce: YES
+
+Insights:
+- No CI/CD detected → changes are not automatically validated
+- Missing seed control → results may not be reproducible
 ```
 
 ---
 
-## Key Metrics & Observations
+## JSON Output Example
 
-- Enabled reproducible experiment tracking through structured run storage
-- Simplified comparison of model performance across runs
-- Demonstrated improved accuracy and loss through configuration changes
-- Reduced ambiguity in experiment evaluation by standardizing workflows
-
----
-
-## System Insights
-
-- Reproducibility requires structured experiment tracking and metadata
-- CLI-based workflows simplify experiment management and automation
-- Consistent logging enables reliable comparison across runs
-- Even simple tracking systems significantly improve ML workflow clarity
-
----
-
-## CLI Demo
-
-![CLI Demo](results/cli_demo.gif)
-
----
-
-## Example Results
-
-### Accuracy Comparison
-
-![Accuracy Comparison](results/accuracy_comparison.png)
-
-Higher accuracy indicates improved model performance under comparable configurations.
-
----
-
-## Project Structure
-
-```text
-mltracker/
-  ├── cli.py
-  └── storage.py
-
-tests/
-examples/
-scripts/
-results/
+```json
+{
+  "repository": "user/repo",
+  "score": 7.5,
+  "risk": "MEDIUM",
+  "analysis": {},
+  "quality": {},
+  "patterns": {},
+  "insights": []
+}
 ```
 
 ---
 
-## Testing
+## Features
 
-```bash
-pytest -q
+- GitHub API integration (with authentication support)
+- Repository structure analysis (CI/CD, benchmarks, datasets)
+- Code quality analysis (dependencies, determinism, training loops)
+- Reproducibility scoring with weighted signals
+- Risk classification (LOW / MEDIUM / HIGH)
+- ML systems pattern detection (PyTorch, distributed training, all-reduce)
+- Code-level inspection via GitHub API
+- Insight generation based on system signals
+- JSON output for automation and pipelines
+- Rich CLI interface (tables, colors)
+
+---
+
+## Architecture
+
+```mermaid
+flowchart TD
+    A[CLI Input] --> B[GitHub API]
+    B --> C[File Fetcher]
+    C --> D[Structure Analyzer]
+    C --> E[Code Quality Analyzer]
+    C --> F[ML Pattern Detector]
+    D --> G[Scoring Engine]
+    E --> G
+    G --> H[Risk Classifier]
+    D --> I[Insights Generator]
+    E --> I
+    F --> I
+    H --> J[Report Output]
+    I --> J
 ```
 
 ---
 
-## Tech Stack
+## Design Principles
 
-- Python
-- JSON (file-based storage)
-- PyTest
-- CLI (argparse)
+- **Reproducibility-first** — treat environment and determinism as first-class concerns
+- **Signal over noise** — focus on high-impact engineering indicators
+- **System-aware analysis** — go beyond files into behavior and patterns
+- **Composable design** — CLI + JSON for integration into workflows
+
+---
+
+## Evaluation Dimensions
+
+The scoring system considers:
+
+- Environment setup (dependencies, packaging)
+- Determinism (seed control)
+- Documentation
+- Testing and validation
+- CI/CD pipelines
+- Benchmarking practices
+- Dataset reproducibility
+- Configuration-driven experimentation
+
+---
+
+## Roadmap
+
+- [ ] AST-based static analysis (deeper code understanding)
+- [ ] Dataset pipeline validation
+- [ ] Training loop structure detection
+- [ ] Performance bottleneck hints
+- [ ] Multi-repo comparison
+- [ ] Web dashboard (FastAPI)
+
+---
+
+## Limitations
+
+- Heuristic-based detection (not full static analysis yet)
+- Partial file sampling for performance
+- GitHub API rate limits without authentication
+- Static analysis only (does not execute code)
+
+---
+
+## Why This Matters
+
+Reproducibility is a major gap in real-world ML systems.
+
+This project explores how:
+
+- System design decisions affect reproducibility
+- Engineering practices impact reliability
+- Scalability constraints influence outcomes
 
 ---
 
 <div align="center">
 
-*Omprakash Sahani — Machine Learning Systems Engineer (Early Career)*
+*Omprakash Sahani — ML Systems Engineer (Distributed Training · Optimization · Systems)*
 
 </div>
