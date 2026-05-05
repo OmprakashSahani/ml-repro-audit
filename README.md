@@ -6,8 +6,8 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![Interface](https://img.shields.io/badge/Interface-CLI-green)
 ![Status](https://img.shields.io/badge/Status-Active-success)
-![PyPI](https://img.shields.io/pypi/v/ml-repro-audit)
-![Downloads](https://img.shields.io/pypi/dm/ml-repro-audit)
+[![PyPI](https://img.shields.io/pypi/v/ml-repro-audit.svg)](https://pypi.org/project/ml-repro-audit/)
+[![Downloads](https://img.shields.io/pypi/dm/ml-repro-audit.svg)](https://pypi.org/project/ml-repro-audit/)
 
 </div>
 
@@ -15,7 +15,9 @@
 
 ## Quick Demo
 
-[![asciicast](https://asciinema.org/a/9nPj0yPcWiEqekck.svg)](https://asciinema.org/a/9nPj0yPcWiEqekck)
+## 🎥 Demo
+
+[![asciicast](https://asciinema.org/a/OgamYxdbBFK8FMZk.svg)](https://asciinema.org/a/OgamYxdbBFK8FMZk)
 
 ## Try in 10 seconds
 
