@@ -1,8 +1,10 @@
 import argparse
+import json
 
 from rich.console import Console
 from rich.table import Table
 
+from ml_audit.analyzer.code_quality import analyze_code_quality
 from ml_audit.analyzer.ml_patterns import detect_ml_patterns
 from ml_audit.analyzer.repo_structure import analyze_repo_files
 from ml_audit.github_api import (
@@ -29,6 +31,12 @@ def main() -> None:
         help="GitHub repository URL to audit",
     )
 
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results in JSON format",
+    )
+
     args = parser.parse_args()
 
     if not args.repo_url:
@@ -41,14 +49,33 @@ def main() -> None:
         files = fetch_repo_files(owner, repo)
 
         analysis = analyze_repo_files(files)
+        quality = analyze_code_quality(owner, repo, files)
         patterns = detect_ml_patterns(owner, repo, files)
 
-        score, breakdown = compute_reproducibility_score(analysis)
+        score, breakdown = compute_reproducibility_score(analysis, quality)
         risk = compute_risk_level(score)
         insights = generate_insights(analysis)
 
     except ValueError as e:
-        console.print(f"[red]Error:[/red] {e}")
+        if args.json:
+            print(json.dumps({"error": str(e)}, indent=2))
+        else:
+            console.print(f"[red]Error:[/red] {e}")
+        return
+
+    if args.json:
+        output = {
+            "repository": metadata["full_name"],
+            "stars": metadata["stargazers_count"],
+            "analysis": analysis,
+            "quality": quality,
+            "patterns": patterns,
+            "score": score,
+            "risk": risk,
+            "breakdown": breakdown,
+            "insights": insights,
+        }
+        print(json.dumps(output, indent=2))
         return
 
     console.print(f"\n[bold cyan]Repository:[/bold cyan] {metadata['full_name']}")
@@ -83,6 +110,16 @@ def main() -> None:
         breakdown_table.add_row(key, f"[{result_color}]{value}[/{result_color}]")
 
     console.print(breakdown_table)
+
+    quality_table = Table(title="Code Quality Signals")
+    quality_table.add_column("Signal", style="bold")
+    quality_table.add_column("Detected")
+
+    for key, value in quality.items():
+        status = "[green]YES[/green]" if value else "[red]NO[/red]"
+        quality_table.add_row(key, status)
+
+    console.print(quality_table)
 
     pattern_table = Table(title="ML Systems Detection")
     pattern_table.add_column("Pattern", style="bold")
