@@ -1,26 +1,51 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "ml-repro-audit"
 version = "0.1.0"
 description = "ML Systems Reproducibility Auditor"
-authors = [
-  { name = "Omprakash Sahani" }
-]
+readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Omprakash Sahani", email = "Omprakash.Sahani7991@gmail.com" }
+]
+keywords = [
+  "machine-learning",
+  "reproducibility",
+  "ml-systems",
+  "github-api",
+  "cli",
+  "developer-tools"
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
 
 dependencies = [
   "requests",
   "rich"
 ]
 
+[project.urls]
+Homepage = "https://github.com/OmprakashSahani/ml-repro-audit"
+Repository = "https://github.com/OmprakashSahani/ml-repro-audit"
+Issues = "https://github.com/OmprakashSahani/ml-repro-audit/issues"
+
 [project.scripts]
 ml-audit = "ml_audit.cli:main"
 
-[tool.setuptools]
-packages = ["ml_audit"]
-
-[tool.setuptools.package-dir]
-"" = "."
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ml_audit*"]
