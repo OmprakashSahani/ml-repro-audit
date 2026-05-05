@@ -52,6 +52,25 @@ ml-audit https://github.com/user/repo
 
 ---
 
+## GitHub Action Usage
+
+```yaml
+name: ML Reproducibility Audit
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: OmprakashSahani/ml-repro-audit/.github/actions/ml-audit@v1
+        with:
+          repo-url: https://github.com/user/repo
+```
+
+---
+
 ## Example Script
 
 Run a quick audit using:
