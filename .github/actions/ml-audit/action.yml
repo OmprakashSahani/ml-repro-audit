@@ -1,0 +1,23 @@
+name: "ML Reproducibility Auditor"
+description: "Audit ML repositories for reproducibility and systems quality"
+
+inputs:
+  repo-url:
+    description: "GitHub repository URL to audit"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install tool
+      run: pip install -e .
+      shell: bash
+
+    - name: Run audit
+      run: ml-audit ${{ inputs.repo-url }}
+      shell: bash
