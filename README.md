@@ -50,7 +50,19 @@ pip install -e .
 ml-audit https://github.com/user/repo
 ```
 
-### JSON Output
+---
+
+## Example Script
+
+Run a quick audit using:
+
+```bash
+./examples/run_audit.sh
+```
+
+---
+
+## JSON Output
 
 ```bash
 ml-audit https://github.com/user/repo --json
@@ -117,6 +129,27 @@ Insights:
 - Insight generation based on system signals
 - JSON output for automation and pipelines
 - Rich CLI interface (tables, colors)
+
+---
+
+## GitHub Integration
+
+This tool integrates directly with the GitHub API to:
+
+- Fetch repository metadata and file structure
+- Inspect source code for ML system patterns
+- Analyze engineering signals across repositories
+
+It is designed as a developer tool to audit and improve repository quality within the GitHub ecosystem.
+
+---
+
+## Use Cases
+
+- Evaluate reproducibility of ML repositories before use
+- Audit open-source projects for engineering quality
+- Compare ML infrastructure practices across repositories
+- Integrate into CI pipelines for repository validation
 
 ---
 
