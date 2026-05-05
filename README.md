@@ -6,6 +6,8 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![Interface](https://img.shields.io/badge/Interface-CLI-green)
 ![Status](https://img.shields.io/badge/Status-Active-success)
+![PyPI](https://img.shields.io/pypi/v/ml-repro-audit)
+![Downloads](https://img.shields.io/pypi/dm/ml-repro-audit)
 
 </div>
 
@@ -13,8 +15,16 @@
 
 ## Quick Demo
 
+[![asciicast](https://asciinema.org/a/9nPj0yPcWiEqekck.svg)](https://asciinema.org/a/9nPj0yPcWiEqekck)
+
+## Try in 10 seconds
+
 ```bash
+pip install ml-repro-audit
+
 ml-audit https://github.com/pytorch/pytorch
+ml-audit https://github.com/huggingface/transformers
+ml-audit https://github.com/Lightning-AI/lightning
 ```
 
 ---
@@ -33,6 +43,15 @@ This tool evaluates repositories through a **systems lens**, focusing on:
 - Reproducibility signals
 - Engineering maturity
 - ML systems design patterns
+
+---
+
+## Why this tool
+
+- Goes beyond linting → evaluates ML systems signals
+- Detects determinism, CI/CD, benchmarking, datasets
+- Uses GitHub API (no cloning required)
+- Works as CLI + GitHub Action + PyPI package
 
 ---
 
