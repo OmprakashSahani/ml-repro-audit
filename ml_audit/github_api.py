@@ -32,3 +32,15 @@ def fetch_repo_metadata(owner: str, repo: str) -> dict:
         raise ValueError(f"GitHub API error: {response.status_code}")
 
     return response.json()
+
+def fetch_repo_files(owner: str, repo: str) -> list[str]:
+    url = f"{GITHUB_API_BASE}/repos/{owner}/{repo}/git/trees/HEAD?recursive=1"
+
+    response = requests.get(url, timeout=10)
+
+    if response.status_code != 200:
+        raise ValueError(f"Failed to fetch repo files: {response.status_code}")
+
+    data = response.json()
+
+    return [item["path"] for item in data.get("tree", []) if item["type"] == "blob"]

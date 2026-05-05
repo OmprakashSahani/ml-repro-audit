@@ -1,6 +1,11 @@
 import argparse
 
-from ml_audit.github_api import fetch_repo_metadata, parse_github_url
+from ml_audit.analyzer.repo_structure import analyze_repo_files
+from ml_audit.github_api import (
+    fetch_repo_files,
+    fetch_repo_metadata,
+    parse_github_url,
+)
 
 
 def main() -> None:
@@ -24,12 +29,21 @@ def main() -> None:
     try:
         owner, repo = parse_github_url(args.repo_url)
         metadata = fetch_repo_metadata(owner, repo)
+        files = fetch_repo_files(owner, repo)
+        analysis = analyze_repo_files(files)
     except ValueError as e:
         print(f"Error: {e}")
         return
 
     print(f"Repository: {metadata['full_name']}")
-    print(f"Description: {metadata.get('description')}")
     print(f"Stars: {metadata['stargazers_count']}")
-    print(f"Forks: {metadata['forks_count']}")
-    print(f"Language: {metadata.get('language')}")
+    print()
+
+    print("Structure Analysis:")
+
+    for key, value in analysis.items():
+        print(f"- {key}: {'YES' if value else 'NO'}")
+
+
+if __name__ == "__main__":
+    main()
