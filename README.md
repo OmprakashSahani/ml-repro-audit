@@ -16,6 +16,14 @@
 
 [![asciicast](https://asciinema.org/a/OgamYxdbBFK8FMZk.svg)](https://asciinema.org/a/OgamYxdbBFK8FMZk)
 
+## Architecture
+
+<p align="center">
+  <img src="/diagram/repro-audit-architecture.png"/>
+</p>
+
+---
+
 ## Try in 10 seconds
 
 ```bash
@@ -187,27 +195,6 @@ It is designed as a developer tool to audit and improve repository quality withi
 - Audit open-source projects for engineering quality
 - Compare ML infrastructure practices across repositories
 - Integrate into CI pipelines for repository validation
-
----
-
-## Architecture
-
-```mermaid
-flowchart TD
-    A[CLI Input] --> B[GitHub API]
-    B --> C[File Fetcher]
-    C --> D[Structure Analyzer]
-    C --> E[Code Quality Analyzer]
-    C --> F[ML Pattern Detector]
-    D --> G[Scoring Engine]
-    E --> G
-    G --> H[Risk Classifier]
-    D --> I[Insights Generator]
-    E --> I
-    F --> I
-    H --> J[Report Output]
-    I --> J
-```
 
 ---
 
