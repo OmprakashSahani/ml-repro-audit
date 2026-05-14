@@ -16,6 +16,8 @@
 
 [![asciicast](https://asciinema.org/a/OgamYxdbBFK8FMZk.svg)](https://asciinema.org/a/OgamYxdbBFK8FMZk)
 
+---
+
 ## Architecture
 
 <p align="center">
